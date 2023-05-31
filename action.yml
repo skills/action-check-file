@@ -1,0 +1,42 @@
+name: "Check file"
+description: "Check file for expected changes."
+inputs:
+  file:
+    description: "File to search."
+    required: true
+  search:
+    description: "Grep pattern to search."
+    required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        FILE: ${{ inputs.file }}
+        SEARCH: ${{ inputs.search }}
+      run: |
+        echo "Check that all required env variables are set"
+        if [ -z "$FILE" ]
+        then
+          echo "FILE is unset or set to the empty string"
+          exit 1
+        fi
+        if [ -z "$SEARCH" ]
+        then
+          echo "SEARCH is unset or set to the empty string"
+          exit 1
+        fi
+
+        # Make sure to escape your backslashes => \\ <= in YAML
+        # So that its still a single \ in bash
+
+        echo "Check that $FILE includes $SEARCH"
+        if grep --extended-regexp "$SEARCH" -- $FILE
+        then
+          echo "Found $SEARCH in $FILE"
+        else
+          echo "Missing $SEARCH in $FILE"
+          echo "----------------"
+          echo "$(cat $FILE)"
+          exit 204  # We're sending a weird code so it looks different from other "failures"
+        fi

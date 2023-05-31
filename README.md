@@ -8,8 +8,8 @@ Example use:
     steps:
       # Check that there is at least one header in the markdown file.
       - name: Check markdown syntax, header
-        run: ./.github/script/check-file.sh
-        env:
+        uses: skills/action-check-file@v1
+        with:
           file: "index.md"
           search: "# [a-zA-Z0-9]"
 ```

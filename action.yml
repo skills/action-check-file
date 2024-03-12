@@ -31,7 +31,7 @@ runs:
         # So that its still a single \ in bash
 
         echo "Check that $FILE includes $SEARCH"
-        if grep --extended-regexp "$SEARCH" -- $FILE
+        if grep --perl-regexp "$SEARCH" -- $FILE
         then
           echo "Found $SEARCH in $FILE"
         else
